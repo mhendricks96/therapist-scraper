@@ -8,12 +8,15 @@ import regex
 headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36"}
 
 records = []
-next_url = "https://www.psychologytoday.com/us/therapists/or/portland/108093?sid=610a32c3d201b&ref=1"
-for person in range(10):
+next_url = "https://www.psychologytoday.com/us/therapists/97005/244269?sid=610b9244a5b35&ref=1"
+for person in range(224):
 
     next_page = requests.get(next_url, headers=headers)
     next_soup = BeautifulSoup(next_page.content, "html.parser")
-    next_zip_code = next_soup.find(itemprop="postalcode").get_text()
+    try:
+      next_zip_code = next_soup.find(itemprop="postalcode").get_text()
+    except AttributeError:
+        next_zip_code = "N/A"
     next_name = next_soup.find(itemprop="name").get_text()
     next_title = next_soup.find("h2").get_text()
     try:
@@ -52,4 +55,4 @@ df["price"] = df["price"].str.replace(' ','')
 
 df["title"] = df["title"].str.replace(' ','')
 
-df.to_csv('therapist_data.csv')
+df.to_csv('97005_data.csv')
